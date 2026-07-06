@@ -1,8 +1,6 @@
 #!/usr/bin/python3
 
 import os
-import pydub
-from pydub import AudioSegment
 import subprocess
 from pathlib import Path
 import urllib.request
@@ -31,6 +29,12 @@ def convert_to_adpcm(wav_file, bitrate, algo='ADPCM66'):
   return wav_file + '.adp'
 
 def convert_audiofile(input_file, bitrate=9000):
+  try:
+    from pydub import AudioSegment
+  except ModuleNotFoundError as e:
+    raise ModuleNotFoundError(
+      "pydub is required for audio conversion. Install it with `pip install pydub`."
+    ) from e
   sound = AudioSegment.from_file(input_file)
   sound = sound.set_frame_rate(bitrate)
   sound.export('tmp.wav', format="wav")

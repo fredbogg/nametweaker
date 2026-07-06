@@ -91,9 +91,9 @@ class client(object):
         if self.debug:
           print("Checksum cmd = %s" % cmdl)
         p = Popen(cmd, stderr=PIPE)
-        _, err = p.communicate(self._timeout)
+        _, err = p.communicate(timeout=self._timeout)
         if not b'Good' in err:
-            self.error('SCSI error.' % err) 
+            self.error('SCSI error: %s' % err)
 
     def wait_finish(self):
       print("Waiting for checksum finish...")
@@ -169,7 +169,7 @@ class client(object):
             while timeout:
                 if sys.platform == 'win32':
                     p = Popen(self._sg_scan, stdout=PIPE)
-                    out, _ = p.communicate(self._timeout)
+                    out, _ = p.communicate(timeout=self._timeout)
                     lines = [x.decode('utf-8') for x in out.split(b'\n')]
                     if lines:
                         for line in lines:
